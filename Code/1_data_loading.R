@@ -1,8 +1,6 @@
-# CARGA Y PREPARACIÓN DE DATOS - SCEL_MIGUEL
-# Ejecutar desde el directorio raíz del proyecto (SCEL_MIGUEL.Rproj)
-# Los demás scripts hacen source("Code/00_data_loading.R")
+# Load data and pre-processing
 
-# ---- Librerías ----
+# Load libraries
 library(qiime2R)
 library(tidyverse)
 library(readxl)
@@ -18,18 +16,19 @@ library(rnaturalearth)
 library(devtools)
 library(MicroBioMeta)
 
-# ---- Tablas de abundancia ----
+#load data
 table  <- read_qza("Data/run_f250_r230_feature-table.qza")$data %>% as.data.frame()
 tabler <- read_qza("Data/rarefied_table.qza")$data %>% as.data.frame()
+
+
+# Pre-processing
 
 colnames(table)  <- sub(".*\\.", "", colnames(table))
 colnames(tabler) <- sub(".*\\.", "", colnames(tabler))
 
-# ---- Profundidad de secuenciación ----
 depth <- read.delim("Data/depth.csv", sep = ";")
 depth$Sample.ID <- colnames(table)
 
-# ---- Metadata ----
 metadata <- read.csv("Data/metadata_ids.csv", sep = ";") %>%
   mutate_all(as.character) %>%
   dplyr::select(ID, everything(), -ID.CAM)
@@ -106,7 +105,6 @@ meta <- metas %>%
     )
   )
 
-# ---- Taxonomía ----
 taxonomy_gg2 <- read_qza("Data/taxonomy_gg2_weighted.qza")$data %>%
   column_to_rownames("Feature.ID") %>%
   dplyr::select(-Confidence)
@@ -117,7 +115,6 @@ table_taxa  <- merge_feature_taxonomy(table,  taxonomy_gg2) %>%
 table_taxar <- merge_feature_taxonomy(tabler, taxonomy_gg2) %>%
   dplyr::select(-any_of(c("32", "38", "117")))
 
-# ---- Filtrar muestras problemáticas y alinear ----
 EXCLUDE <- c("32", "38", "117")
 
 metas2 <- meta %>%
@@ -138,5 +135,4 @@ table_taxa2r <- align_table(table_taxar, metas2$SAMPLEID)
 samples_ok <- intersect(metas2$SAMPLEID, colnames(table_taxa2r))
 metas2r    <- metas2 %>% filter(SAMPLEID %in% samples_ok)
 
-# Muestras a excluir en algunos análisis
 muestras <- c("54", "53")

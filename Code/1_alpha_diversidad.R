@@ -1,8 +1,6 @@
-# DIVERSIDAD ALFA - SCEL_MIGUEL
-# Boxplots de números de Hill por categoría de distancia y por estado
-# Ejecutar desde el directorio raíz del proyecto (SCEL_MIGUEL.Rproj)
+# Alpha diversity
 
-source("Code/00_data_loading.R")
+source("Code/1_data_loading.R")
 
 # ---- Alpha Hill por distancia (rarefied, coloreado por estado) ----
 alphahill <- alpha_hill_plot(
