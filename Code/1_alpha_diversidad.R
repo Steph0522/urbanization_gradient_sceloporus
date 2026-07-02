@@ -2,7 +2,7 @@
 
 source("Code/1_data_loading.R")
 
-# ---- Alpha Hill por distancia (rarefied, coloreado por estado) ----
+# 
 alphahill <- alpha_hill_plot(
   table    = table_taxa2r,
   metadata = metas2r, #%>% filter(!MUESTRA %in% muestras),
