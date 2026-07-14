@@ -1,14 +1,14 @@
 # Alpha diversity
 
-source("Code/1_data_loading.R")
+source("Code/0_loading_data.R")
 
-# 
+# alpha diversity 
 alphahill <- alpha_hill_plot(
   table    = table_taxa2r,
-  metadata = metas2r, #%>% filter(!MUESTRA %in% muestras),
+  metadata = metas2r %>% filter(!MUESTRA %in% muestras),
   type     = "boxplot",
   x_col    = "estado2",
-  fill_col = "dist_cat2",
+  fill_col = "estado2",
   free_y   = TRUE
 ) +
   geom_point(

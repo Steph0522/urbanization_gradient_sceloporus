@@ -100,11 +100,11 @@ meta <- metas %>%
   drop_na() %>%
   mutate(
     estado  = meta_sf$name,
-    estado2 = case_when(
-      estado == "Puebla"           ~ "Puebla y CDMX",
-      estado == "Distrito Federal" ~ "Puebla y CDMX",
+    estado2 = factor(case_when(
+      estado == "Puebla"           ~ "Puebla and Mexico City",
+      estado == "Distrito Federal" ~ "Puebla and Mexico City",
       estado == "Tlaxcala"         ~ "Tlaxcala"
-    )
+    ))
   )
 
 taxonomy_gg2 <- read_qza("Data/taxonomy_gg2_weighted.qza")$data %>%

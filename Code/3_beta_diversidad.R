@@ -9,10 +9,10 @@ library(cowplot)
 # ---- NMDS Aitchison por categoría de distancia (Puebla y CDMX) ----
 beta_estado <- beta_div_plot(
   table      = table_taxa2,
-  metadata   = metas2 %>% filter(estado2 == "Puebla y CDMX"),
+  metadata   = metas2, #%>% filter(estado2 == "Puebla y CDMX"),
   distance   = "aitchison",
   ordination = "NMDS",
-  group_col  = "dist_cat2"
+  group_col  = "Sex", 
 )
 beta_estado
 ggsave(beta_estado, file = "beta_stat2.png", width = 8, height = 4)

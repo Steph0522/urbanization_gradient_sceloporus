@@ -1,18 +1,33 @@
-# ABUNDANCIAS - SCEL_MIGUEL
-# Barplot de abundancia relativa (género) y heatmap
-# Ejecutar desde el directorio raíz del proyecto (SCEL_MIGUEL.Rproj)
+# relative abundance
 
-source("Code/00_data_loading.R")
+source("Code/0_loading_data.R")
 
-# ---- Barplot de abundancia por categoría de distancia (Puebla y CDMX) ----
+
+#barplot phylum and genus
+
 barplot_genus <- abundance_barplot(
   table        = table_taxa2,
-  metadata     = metas2 %>%
-    filter(SAMPLEID != "23") %>%
-    filter(estado2 == "Puebla y CDMX"),
+  metadata     = metas2, #%>%
+  # filter(SAMPLEID != "23") %>%
+  #    filter(estado2 == "Puebla y CDMX"),
   x_axis_title = "Categoría de distancia",
   level        = "genus",
-  x_col        = "dist_cat2",
+  x_col        = "Sex",
+  label        = "Genus",
+  width_equal  = FALSE,
+  top_n        = 30,
+  add_remained = TRUE
+)
+
+
+barplot_genus <- abundance_barplot(
+  table        = table_taxa2,
+  metadata     = metas2, #%>%
+   # filter(SAMPLEID != "23") %>%
+#    filter(estado2 == "Puebla y CDMX"),
+  x_axis_title = "Categoría de distancia",
+  level        = "genus",
+  x_col        = "Sex",
   label        = "Genus",
   width_equal  = FALSE,
   top_n        = 30,
