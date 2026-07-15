@@ -1,11 +1,7 @@
-# CORRELACIONES - SCEL_MIGUEL
-# Hill numbers vs distancia, corrplot morfométrico, correlación con variables ambientales
-# Ejecutar desde el directorio raíz del proyecto (SCEL_MIGUEL.Rproj)
-
+# correlations 
 source("Code/00_data_loading.R")
 
-# ---- Cargar números de Hill pre-calculados ----
-# hill.txt: columnas q0, q1, q2 + estado2, dist_km, variables morfométricas
+# load hill data
 hills_wide <- read.delim("hill.txt")
 
 hills_long <- hills_wide %>%
@@ -16,9 +12,14 @@ hills_long3 <- hills_long %>%
   mutate(dist_km_scaled = scale(dist_km)) %>%
   ungroup()
 
-# ===========================================================================
-# PLOTS HILL vs DISTANCIA: todos los datos, Tlaxcala y Puebla/CDMX por separado
-# ===========================================================================
+
+
+alpha_hill_gradient_plot(
+  table    = table_taxa2r,
+  metadata = metas2r,
+  cont_var = "dist_km",
+  method   = "spearman"
+)
 
 # Función auxiliar: calcula stats de regresión y arma el plot
 plot_hill_dist <- function(data, titulo = NULL) {
@@ -215,7 +216,7 @@ corrplot(M,
 dev.off()
 
 # ---- Alpha Hill corrplot (MicroBioMeta) ----
-MicroBioMeta::alpha_hill_corrplot(table_taxa2)
+
 
 # ---- Correlación con variables ambientales (phylum level) ----
 env <- metas2 %>%
