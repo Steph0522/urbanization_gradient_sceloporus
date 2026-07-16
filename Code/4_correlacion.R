@@ -11,7 +11,48 @@ hills_long3 <- hills_long %>%
   group_by(estado2) %>%
   mutate(dist_km_scaled = scale(dist_km)) %>%
   ungroup()
+p_tlax <- alpha_hill_gradient_plot(
+  table        = table_taxa2r,
+  metadata     = metas2r %>% filter(estado2 == "Tlaxcala"),
+  cont_var     = "dist_km",
+  method       = "spearman",
+  figure_title = "Tlaxcala"
+)+
+  ggh4x::facetted_pos_scales(
+    y = list(
+      q == "q0" ~ scale_y_continuous(limits = c(0, 550)),
+      q == "q1" ~ scale_y_continuous(limits = c(0, 270)),
+      q == "q2" ~ scale_y_continuous(limits = c(0, 160))
+      
+    )
+  )
 
+p_tlax
+p_pue <- alpha_hill_gradient_plot(
+  table        = table_taxa2r,
+  metadata     = metas2r %>% filter(estado2 == "Puebla and Mexico City"),
+  cont_var     = "dist_km",
+  method       = "spearman",
+  figure_title = "Puebla y CDMX"
+)+
+  ggh4x::facetted_pos_scales(
+    y = list(
+      q == "q0" ~ scale_y_continuous(limits = c(0, 550)),
+      q == "q1" ~ scale_y_continuous(limits = c(0, 270)),
+      q == "q2" ~ scale_y_continuous(limits = c(0, 160))
+      
+    )
+  )
+
+cowplot::plot_grid(p_tlax, p_pue, ncol = 1)
+alpha_hill_gradient_plot(
+  table     = table_taxa2r,
+  metadata  = metas2r,
+  cont_var  = "dist_km",
+  group_col = "estado2",
+  method    = "spearman"
+
+  ) # cambiar formato para que salgan 2 y se vea bien
 
 
 alpha_hill_gradient_plot(
@@ -19,7 +60,15 @@ alpha_hill_gradient_plot(
   metadata = metas2r,
   cont_var = "dist_km",
   method   = "spearman"
-)
+)+
+  ggh4x::facetted_pos_scales(
+    y = list(
+      q == "q0" ~ scale_y_continuous(limits = c(0, 550)),
+      q == "q1" ~ scale_y_continuous(limits = c(0, 270)),
+      q == "q2" ~ scale_y_continuous(limits = c(0, 160))
+      
+    )
+  )
 
 # Función auxiliar: calcula stats de regresión y arma el plot
 plot_hill_dist <- function(data, titulo = NULL) {

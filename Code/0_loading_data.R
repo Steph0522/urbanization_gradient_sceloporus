@@ -92,6 +92,7 @@ metas  <- metadatas[match(sub(".*\\.", "", colnames(read_qza("Data/run_f250_r230
                           metadatas$SAMPLEID), ]
 metasr <- metadatas[match(colnames(tabler), metadatas$SAMPLEID), ]
 
+nas <- metas[!complete.cases(metas), ]
 meta_sf    <- st_as_sf(metas %>% drop_na(), coords = c("lon", "lat"), crs = 4326)
 mex_states <- ne_states(country = "Mexico", returnclass = "sf")
 meta_sf    <- st_join(meta_sf, mex_states["name"])
