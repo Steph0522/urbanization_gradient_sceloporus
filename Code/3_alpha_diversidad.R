@@ -16,12 +16,15 @@ alphahill <- alpha_hill_plot(
   x_col    = "estado2",
   fill_col = "estado2",
   free_y   = TRUE, stat = "wilcox.test",
-  save_table = FALSE,
+  save_table = TRUE,
 ) +
   geom_point(
     position = position_jitter(width = 0.15, height = 0),
     alpha = 0.6, size = 2, inherit.aes = TRUE
   )+ theme(legend.position = "none")
+
+file.rename("hill.txt", "Data/hill.txt")
+
 
 alphahill
 

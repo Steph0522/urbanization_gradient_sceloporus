@@ -3,6 +3,7 @@ library(rnaturalearthdata)
 library(sf)
 library(ggplot2)
 library(ggspatial)
+library(ggmap)
 
 
 # sampling and sites map
@@ -83,7 +84,8 @@ ggplot() +
     data  = metas2r_filt,
     aes(x = lon, y = lat, label = MUESTRA),
     size  = 3, color = "black"
-  )
+  )+ scale_color_viridis_c(option = "cvidis", name = "Distance to\nurban center (km)")
+
 
 ggsave("Plots/map_km_urban.png", width = 10, height = 5, dpi = 300)
 

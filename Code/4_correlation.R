@@ -1,8 +1,8 @@
 # correlations 
-source("Code/00_data_loading.R")
+source("Code/0_loading_data.R")
 
 # load hill data
-hills_wide <- read.delim("hill.txt")
+hills_wide <- read.delim("Data/hill.txt")
 
 hills_long <- hills_wide %>%
   pivot_longer(cols = c(q0, q1, q2), names_to = "q", values_to = "hill")
@@ -27,13 +27,12 @@ p_tlax <- alpha_hill_gradient_plot(
     )
   )
 
-p_tlax
 p_pue <- alpha_hill_gradient_plot(
   table        = table_taxa2r,
   metadata     = metas2r %>% filter(estado2 == "Puebla and Mexico City"),
   cont_var     = "dist_km",
   method       = "spearman",
-  figure_title = "Puebla y CDMX"
+  figure_title = "Puebla and Mexico City"
 )+
   ggh4x::facetted_pos_scales(
     y = list(
@@ -44,7 +43,12 @@ p_pue <- alpha_hill_gradient_plot(
     )
   )
 
-cowplot::plot_grid(p_tlax, p_pue, ncol = 1)
+cowplot::plot_grid(p_tlax+theme(axis.title.x = element_blank()), 
+                   p_pue+ xlab("Distance to urban center (Km)"), ncol = 1)
+
+
+ggsave("Plots/alpha_cor.png", width = 14, height = 10)
+
 alpha_hill_gradient_plot(
   table     = table_taxa2r,
   metadata  = metas2r,
@@ -52,8 +56,8 @@ alpha_hill_gradient_plot(
   group_col = "estado2",
   method    = "spearman"
 
-  ) # cambiar formato para que salgan 2 y se vea bien
-
+  ) + theme(legend.position = "none")+ xlab("Distance to urban center (Km)")
+ggsave("Plots/alpha_cor2.png", width = 14, height = 6)
 
 alpha_hill_gradient_plot(
   table    = table_taxa2r,

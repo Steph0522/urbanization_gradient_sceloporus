@@ -1,17 +1,16 @@
 #beta diversity
 
-source("Code/00_data_loading.R")
-source("Code/beta_div_plot2.R")
+source("Code/0_loading_data.R")
 library(cowplot)
 
 # nmds with geographical area
 beta_estado <- beta_div_plot(
   table      = table_taxa2,
   metadata   = metas2, 
-  distance   = "compositional",
+  distance   = "aitchison",
   ordination = "NMDS",
   group_col  = "estado2", legend_title = "Geographical area",
-  title = "NMDS - all samples", save_table = TRUE
+  title = "NMDS - all samples"
 )
 
 
@@ -19,16 +18,17 @@ beta_estado <- beta_div_plot(
 metas3 <- metas2 %>%
   mutate(
     dist_km2 = log(dist_km),
-    across(Masa:Elevación, as.numeric)
+    across(LHC:Elevación, as.numeric)
   )
 
-beta_km <- beta_div_plot2(
+beta_km <- beta_div_plot(
   table      = table_taxa2,
   metadata   = metas3,
-  distance   = "compositional",
+  distance   = "aitchison",
   ordination = "NMDS",
   group_col  = "dist_km")+
   ggtitle("NMDS - all samples")
+
 
 
 # mds por estado
@@ -38,7 +38,7 @@ beta_plots <- lapply(estados, function(est) {
   meta_est <- metas3 %>% filter(estado2 == est)
   tab_est  <- table_taxa2[, c(intersect(meta_est$SAMPLEID, colnames(table_taxa2)), "taxonomy")]
 
-  beta_div_plot2(
+  beta_div_plot(
     table      = tab_est,
     metadata   = meta_est,
     distance   = "aitchison",
@@ -62,7 +62,7 @@ MicroBioMeta::beta_test_table(
   table        = table_taxa2,
   metadata     = metas2,
   formula_str  = "dist_km",
-  method       = "euclidean",
+  method       = "aitchison",
   test         = "permanova",
   permutations = 999
 )
@@ -71,7 +71,7 @@ MicroBioMeta::beta_test_table(
   table        = table_taxa2,
   metadata     = metas2,
   formula_str  = "estado2",
-  method       = "euclidean",
+  method       = "aitchison",
   test         = "permanova",
   permutations = 999
 )
@@ -82,7 +82,7 @@ MicroBioMeta::beta_test_table(
   table        = table_taxa2,
   metadata     = metas3_df,
   formula_str  = "dist_km * estado2",
-  method       = "euclidean",
+  method       = "aitchison",
   test         = "permanova",
   permutations = 999
 )
@@ -99,7 +99,7 @@ permanova_results <- lapply(estados, function(est) {
     table        = tab_est,
     metadata     = meta_est,
     formula_str  = "dist_km",
-    method       = "euclidean",
+    method       = "aitchison",
     test         = "permanova",
     permutations = 999
   )

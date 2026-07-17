@@ -15,6 +15,7 @@ library(ggrepel)
 library(corrplot)
 library(leaflet)
 library(rnaturalearth)
+library(rnaturalearthhires)
 library(devtools)
 library(MicroBioMeta)
 
@@ -33,18 +34,18 @@ depth$Sample.ID <- colnames(table)
 
 metadata <- read.csv("Data/metadata_ids.csv", sep = ";") %>%
   mutate_all(as.character) %>%
-  dplyr::select(ID, everything(), -ID.CAM)
+  dplyr::select(ID, everything(), -ID.CAM, -SITIO)
 
 meta_morfo <- read_excel("Data/metadata_final.xlsx") %>%
   mutate(sex = case_when(Sex == "HG" ~ "H", TRUE ~ as.character(Sex))) %>%
-  mutate_all(as.character)
+  mutate_all(as.character) %>% dplyr::select(-TC, -TA, -TS, -Masa)
 
 metadatas <- meta_morfo %>%
   filter(MUESTRA != "23") %>%
   right_join(metadata, by = c("MUESTRA", "ID")) %>%
   mutate(
     across(
-      c(ID, lat, lon, lat2, lon2, TC:Elevación),
+      c(ID, lat, lon, lat2, lon2, LHC:Elevación),
       ~as.numeric(na_if(trimws(.x), "NA"))
     )
   ) %>%
@@ -92,7 +93,6 @@ metas  <- metadatas[match(sub(".*\\.", "", colnames(read_qza("Data/run_f250_r230
                           metadatas$SAMPLEID), ]
 metasr <- metadatas[match(colnames(tabler), metadatas$SAMPLEID), ]
 
-nas <- metas[!complete.cases(metas), ]
 meta_sf    <- st_as_sf(metas %>% drop_na(), coords = c("lon", "lat"), crs = 4326)
 mex_states <- ne_states(country = "Mexico", returnclass = "sf")
 meta_sf    <- st_join(meta_sf, mex_states["name"])
