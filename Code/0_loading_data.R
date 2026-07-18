@@ -36,9 +36,14 @@ metadata <- read.csv("Data/metadata_ids.csv", sep = ";") %>%
   mutate_all(as.character) %>%
   dplyr::select(ID, everything(), -ID.CAM, -SITIO)
 
+
 meta_morfo <- read_excel("Data/metadata_final.xlsx") %>%
   mutate(sex = case_when(Sex == "HG" ~ "H", TRUE ~ as.character(Sex))) %>%
   mutate_all(as.character) %>% dplyr::select(-TC, -TA, -TS, -Masa)
+
+meta_morfo2 <- read_excel("Data/metadata_final.xlsx") %>%
+  mutate(sex = case_when(Sex == "HG" ~ "H", TRUE ~ as.character(Sex))) %>%
+  mutate_all(as.character) 
 
 metadatas <- meta_morfo %>%
   filter(MUESTRA != "23") %>%

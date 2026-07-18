@@ -21,11 +21,14 @@ metas3 <- metas2 %>%
     across(LHC:Elevación, as.numeric)
   )
 
+colors <- viridis::viridis(n = 8)
+
 beta_km <- beta_div_plot(
   table      = table_taxa2,
   metadata   = metas3,
   distance   = "aitchison",
   ordination = "NMDS",
+  palette = colors,
   group_col  = "dist_km")+
   ggtitle("NMDS - all samples")
 
@@ -43,7 +46,8 @@ beta_plots <- lapply(estados, function(est) {
     metadata   = meta_est,
     distance   = "aitchison",
     ordination = "NMDS",
-    group_col  = "dist_km"
+    group_col  = "dist_km",
+    palette = colors,
   ) + ggtitle(paste("NMDS - ", est))
 })
 
@@ -53,7 +57,7 @@ beta_plots[[2]]
 
 
 plot_grid(beta_estado, beta_km, beta_plots[[1]], beta_plots[[2]], align = "hv", labels = c("A", "B", "C", "D"))
-ggsave(file = "Plots/beta_nmds.png", width = 14, height = 8, dpi = 300)
+ggsave(file = "Plots/beta_nmds.png", width = 16, height = 8, dpi = 300)
 
 
 
